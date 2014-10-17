@@ -13,15 +13,21 @@
 
   <div class="container">
     <div class="page-header">
-    	<h1>
-    		jQuery Resizable Columns
-    		<small>Demo</small>
-    	</h1>
-	</div>
+        <h1>
+            jQuery Resizable Columns
+            <small>Demo</small>
+        </h1>
+        <p class="lead">
+          Grab the column borders and drag em'! <strong>Bonus: refresh the page.</strong>
+        </p>
+    </div>
 
-    <blockquote><em>Grab the column borders and drag em'! <strong>Bonus: refresh the page.</strong></em></blockquote>
+    <!--Example 1-->
+    <blockquote>
+      <em>This is an example of a table using <strong>percentages</strong> in order to define the column widths.</em>
+    </blockquote>
 
-    <table class="table table-bordered" data-resizable-columns-id="demo-table-v2">
+    <table class="table table-bordered" data-resizable-columns-id="demo-table">
       <thead>
         <tr>
           <th data-resizable-column-id="#">#</th>
@@ -51,12 +57,83 @@
       </tbody>
     </table>
 
-    <pre>
+    <!--Source for Example 1-->
+    <p>
+      <a class="btn" data-show-source="demo-table"><i class="glyphicon glyphicon-eye-open"></i> View source</a>
+      <a class="btn hide" data-hide-source="demo-table"><i class="glyphicon glyphicon-eye-close"></i> Hide source</a>
+    </p>
+    <pre data-source-id="demo-table" class="hide">
 &lt;script src="/path/to/jquery.js"&gt;&lt;/script&gt;
 &lt;script src="/path/to/store.js"&gt;&lt;/script&gt;
 &lt;script src="/path/to/jquery.resizableColumns.js"&gt;&lt;/script&gt;
 
 &lt;table class="table table-bordered" data-resizable-columns-id="demo-table"&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th data-resizable-column-id="#"&gt;#&lt;/th&gt;
+&lt;th data-resizable-column-id="first_name"&gt;First Name&lt;/th&gt;
+&lt;th data-resizable-column-id="last_name"&gt;Last Name&lt;/th&gt;
+&lt;th data-resizable-column-id="username" data-noresize&gt;Username&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+...
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;script&gt;
+$(function(){
+  $('table[data-resizable-columns-id=demo-table]').resizableColumns({
+    store: window.store
+  });
+});
+&lt;/script&gt;</pre>
+
+    <!--Example 2-->
+    <blockquote>
+      <em>This is an example of a table using <strong>pixels</strong> in order to define the column widths.</em>
+    </blockquote>
+
+    <table class="table table-bordered" style="width: auto" data-resizable-columns-id="demo-table-pixels">
+      <thead>
+        <tr>
+          <th data-resizable-column-id="#">#</th>
+          <th data-resizable-column-id="first_name">First Name</th>
+          <th data-resizable-column-id="last_name">Last Name</th>
+          <th data-resizable-column-id="username" id="username-column" data-noresize>Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td colspan="2">Larry the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--Source for Example 2-->
+    <p>
+      <a class="btn" data-show-source="demo-table-pixels"><i class="glyphicon glyphicon-eye-open"></i> View source</a>
+    </p>
+    <pre data-source-id="demo-table-pixels" class="hide">
+&lt;script src="/path/to/jquery.js"&gt;&lt;/script&gt;
+&lt;script src="/path/to/store.js"&gt;&lt;/script&gt;
+&lt;script src="/path/to/jquery.resizableColumns.js"&gt;&lt;/script&gt;
+
+&lt;table class="table table-bordered" style="width: auto" data-resizable-columns-id="demo-table-pixels"&gt;
 &lt;thead&gt;
   &lt;tr&gt;
     &lt;th data-resizable-column-id="#"&gt;#&lt;/th&gt;
@@ -71,11 +148,12 @@
 &lt;/table&gt;
 
 &lt;script&gt;
-$(function(){
-  $("table").resizableColumns({
-    store: window.store
-  });
-});
+  $(function(){
+      $('table[data-resizable-columns-id=demo-table-pixels]').resizableColumns({
+        store: window.store,
+        usePixels: true
+      });
+    });
 &lt;/script&gt;</pre>
   </div>
 
@@ -86,20 +164,32 @@ $(function(){
   <script src="//cdnjs.cloudflare.com/ajax/libs/store.js/1.3.14/store.min.js"></script>
 
   <!-- Plugin -->
-  <script src="dist/jquery.resizableColumns.min.js"></script>
+  <script src="dist/jquery.resizableColumns.js"></script>
   <script>
     $(function(){
-      $("table").resizableColumns({
-        store: window.store
-      });
+        $('table[data-resizable-columns-id=demo-table]').resizableColumns({
+            store: window.store
+        });
+        $('table[data-resizable-columns-id=demo-table-pixels]').resizableColumns({
+            store: window.store,
+            usePixels: true
+        });
+
+        $('a[data-show-source], a[data-hide-source]').click(function() {
+            var $this = $(this),
+            id = $this.data('show-source') || $this.data('hide-source');
+            $('[data-show-source=' + id + ']').toggleClass('hide');
+            $('[data-hide-source=' + id + ']').toggleClass('hide');
+            $('[data-source-id=' + id + ']').toggleClass('hide');
+        });
     });
   </script>
 
   <!-- Analytics -->
   <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-39205841-4', 'dobtco.github.io');
@@ -107,4 +197,3 @@ $(function(){
   </script>
 </body>
 </html>
-
