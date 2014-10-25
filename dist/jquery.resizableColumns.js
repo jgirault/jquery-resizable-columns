@@ -1,4 +1,4 @@
-/* jQuery Resizable Columns v0.1.0 | http://dobtco.github.io/jquery-resizable-columns/ | Licensed MIT | Built Wed Oct 22 2014 11:49:48 */
+/* jQuery Resizable Columns v0.1.0 | http://dobtco.github.io/jquery-resizable-columns/ | Licensed MIT | Built Fri Oct 24 2014 18:33:37 */
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __slice = [].slice;
 
@@ -260,13 +260,19 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
     };
 
     ResizableColumns.prototype.pointerdown = function(e) {
-      var $currentGrip, $leftColumn, $ownerDocument, $rightColumn, newWidths, startPosition, widths;
+      var $currentGrip, $leftColumn, $ownerDocument, $rightColumn, isLtr, newWidths, startPosition, widths;
       e.preventDefault();
+      isLtr = this.$table.css('direction') !== 'rtl';
       $ownerDocument = $(e.currentTarget.ownerDocument);
       startPosition = pointerX(e);
       $currentGrip = $(e.currentTarget);
-      $leftColumn = $currentGrip.data('th');
-      $rightColumn = this.$tableHeaders.eq(this.$tableHeaders.index($leftColumn) + 1);
+      if (isLtr) {
+        $leftColumn = $currentGrip.data('th');
+        $rightColumn = this.$tableHeaders.eq(this.$tableHeaders.index($leftColumn) + 1);
+      } else {
+        $rightColumn = $currentGrip.data('th');
+        $leftColumn = this.$tableHeaders.eq(this.$tableHeaders.index($rightColumn) - 1);
+      }
       widths = {
         left: this.parseWidth($leftColumn[0]),
         right: this.parseWidth($rightColumn[0])
@@ -282,6 +288,9 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         return function(e) {
           var difference;
           difference = pointerX(e) - startPosition;
+          if (!isLtr) {
+            difference = -difference;
+          }
           if (!_this.options.usePixels) {
             difference = difference / _this.$table.width() * 100;
           }

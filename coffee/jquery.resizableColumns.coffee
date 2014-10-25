@@ -198,11 +198,16 @@
     pointerdown: (e) =>
       e.preventDefault()
 
+      isLtr = @$table.css('direction') != 'rtl'
       $ownerDocument = $(e.currentTarget.ownerDocument);
       startPosition = pointerX(e)
       $currentGrip = $(e.currentTarget)
-      $leftColumn = $currentGrip.data('th')
-      $rightColumn = @$tableHeaders.eq @$tableHeaders.index($leftColumn) + 1
+      if (isLtr)
+        $leftColumn = $currentGrip.data('th')
+        $rightColumn = @$tableHeaders.eq @$tableHeaders.index($leftColumn) + 1
+      else
+        $rightColumn = $currentGrip.data('th')
+        $leftColumn = @$tableHeaders.eq @$tableHeaders.index($rightColumn) - 1
 
       widths =
         left: @parseWidth $leftColumn[0]
@@ -219,6 +224,9 @@
       # During mousemove readjust the columns
       $ownerDocument.on 'mousemove.rc touchmove.rc', (e) =>
         difference = pointerX(e) - startPosition
+        if !isLtr
+          difference = -difference
+
         if !@options.usePixels
           # needs to be converted to a percentage
           difference = difference / @$table.width() * 100
